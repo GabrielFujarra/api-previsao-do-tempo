@@ -1,0 +1,23 @@
+services:
+  db:
+    image: postgres:18.0
+    container_name: previsaotempo-db
+    environment:
+      POSTGRES_DB: previsaotempo
+      POSTGRES_USER: ${DB_USER_DOCKER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD_DB_USER_DOCKER}
+    ports:
+      - "5433:5432"
+  app:
+    build: .
+    container_name: previsao-tempo-app
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: ${DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${DB_USER_DOCKER}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD_DB_USER_DOCKER}
+      SECRET_KEY: ${SECRET_KEY}
+      EXPIRATION: ${EXPIRATION}
+    ports:
+      - "8080:8080"
